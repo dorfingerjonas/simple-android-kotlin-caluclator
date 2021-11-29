@@ -9,10 +9,10 @@ import net.objecthunter.exp4j.ExpressionBuilder
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var outputTextView: TextView
-    var lastNumaric: Boolean = false
-    var stateError: Boolean = true
-    var lastDot: Boolean = false
+    private lateinit var outputTextView: TextView
+    private var lastNumeric: Boolean = false
+    private var stateError: Boolean = false
+    private var lastDot: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,21 +29,21 @@ class MainActivity : AppCompatActivity() {
             outputTextView.append((view as Button).text)
         }
 
-        lastNumaric = true
+        lastNumeric = true
     }
 
     fun onDecimalPoint(view: View) {
-        if (lastNumaric && !stateError && !lastDot) {
+        if (lastNumeric && !stateError && !lastDot) {
             outputTextView.append(".")
-            lastNumaric = false
+            lastNumeric = false
             lastDot = true
         }
     }
 
     fun onOperator(view: View) {
-        if (lastNumaric && !stateError) {
+        if (lastNumeric && !stateError) {
             outputTextView.append((view as Button).text)
-            lastNumaric = false
+            lastNumeric = false
             lastDot = false
         }
     }
@@ -51,16 +51,16 @@ class MainActivity : AppCompatActivity() {
 
     fun onClear(view: View) {
         this.outputTextView.text = ""
-        lastNumaric = false
+        lastNumeric = false
         stateError = false
         lastDot = false
     }
 
     fun onEqual(view: View) {
-
-        if (lastNumaric && !stateError) {
+        if (lastNumeric && !stateError) {
             val text = outputTextView.text.toString()
             val expression = ExpressionBuilder(text).build()
+
             try {
                 val result = expression.evaluate()
                 outputTextView.text = result.toString()
@@ -68,11 +68,8 @@ class MainActivity : AppCompatActivity() {
             } catch (ex: Exception) {
                 outputTextView.text = "Error"
                 stateError = true
-                lastNumaric = false
+                lastNumeric = false
             }
         }
-
     }
-
-
 }
